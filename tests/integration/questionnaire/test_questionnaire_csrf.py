@@ -95,6 +95,7 @@ class TestQuestionnaireInterstitial(IntegrationTestCase):
         self.post({'favourite-breakfast': 'Pancakes'})
 
         # When
+        self.get(self.last_url)
         self.post({'favourite-breakfast': 'Pancakes'})
 
         # Then
