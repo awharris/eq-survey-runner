@@ -31,30 +31,22 @@ class TestQuestionnaireInterstitial(IntegrationTestCase):
     def test_given_answered_question_when_change_answer_with_invalid_csrf_token_then_answers_not_saved(self):
         # Given
         self.post()
-        post_data = {
-            'favourite-breakfast': 'Muesli',
-        }
-        self.post(post_data=post_data)
+        self.post({'favourite-breakfast': 'Muesli'})
 
         # When
-        post_data = {
-            'favourite-breakfast': 'Pancakes'
-        }
         self.last_csrf_token = 'made-up-token'
-        self.post(post_data=post_data)
+        self.post({'favourite-breakfast': 'Pancakes'})
 
         # Then
         self.assertStatusForbidden()
         self.get('/dump/answers')
-        answers = json.loads(self.last_response.get_data(True))
+        answers = json.loads(self.getResponseData())
         self.assertEqual('Muesli', answers['answers'][0]['value'])
 
     def test_given_valid_answers_on_household_composition_when_answer_with_invalid_csrf_token_then_answers_not_saved(self):
         # Given
         self.launchSurvey('census', 'household', roles=['dumper'])
-        post_data = {
-            'first_name': 'Joe'
-        }
+        post_data = {'first_name': 'Joe'}
 
         # When
         self.last_csrf_token = 'made-up-token'
@@ -63,35 +55,29 @@ class TestQuestionnaireInterstitial(IntegrationTestCase):
         # Then
         self.assertStatusForbidden()
         self.get('/dump/answers')
-        answers = json.loads(self.last_response.get_data(True))
+        answers = json.loads(self.getResponseData())
         self.assertEqual(0, len(answers['answers']))
 
     def test_given_valid_answers_when_save_and_sign_out_with_invalid_csrf_token_then_answers_not_saved(self):
         # Given
         self.post()
-        post_data = {
-            'favourite-breakfast': 'Muesli',
-            'action[save_sign_out]': ''
-        }
+        post_data = {'favourite-breakfast': 'Muesli'}
 
         # When
         self.last_csrf_token = 'made-up-token'
-        self.post(post_data=post_data)
+        self.post(post_data=post_data, action='save_sign_out')
 
         # Then
         self.assertStatusForbidden()
         self.get('/dump/answers')
-        answers = json.loads(self.last_response.get_data(True))
+        answers = json.loads(self.getResponseData())
         self.assertEqual(0, len(answers['answers']))
 
     def test_given_csrf_attack_when_refresh_then_on_question(self):
         # Given
         self.post()
-        post_data = {
-            'favourite-breakfast': 'Pancakes'
-        }
         self.last_csrf_token = 'made-up-token'
-        self.post(post_data=post_data)
+        self.post({'favourite-breakfast': 'Pancakes'})
 
         # When
         self.get(self.last_url)
@@ -99,26 +85,20 @@ class TestQuestionnaireInterstitial(IntegrationTestCase):
         # Then
         self.assertEqual(self.last_response.status_code, 200)
         self.get('/dump/answers')
-        answers = json.loads(self.last_response.get_data(True))
+        answers = json.loads(self.getResponseData())
         self.assertEqual(0, len(answers['answers']))
 
     def test_given_csrf_attack_when_submit_new_answers_then_answers_saved(self):
         # Given
         self.post()
-        post_data = {
-            'favourite-breakfast': 'Pancakes',
-            'csrf_token': 'made-up-token'
-        }
-        self.post(post_data=post_data)
+        self.last_csrf_token = 'made-up-token'
+        self.post({'favourite-breakfast': 'Pancakes'})
 
         # When
-        post_data = {
-            'favourite-breakfast': 'Pancakes'
-        }
-        self.post(post_data=post_data)
+        self.post({'favourite-breakfast': 'Pancakes'})
 
         # Then
         self.assertStatusOK()
         self.get('/dump/answers')
-        answers = json.loads(self.last_response.get_data(True))
+        answers = json.loads(self.getResponseData())
         self.assertEqual('Pancakes', answers['answers'][0]['value'])
