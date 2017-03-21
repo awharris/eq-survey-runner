@@ -92,7 +92,7 @@ class TestQuestionnaireInterstitial(IntegrationTestCase):
         # Given
         self.post()
         self.last_csrf_token = 'made-up-token'
-        self.post({'favourite-breakfast': 'Pancakes'})
+        self.post({'favourite-breakfast': 'Muesli'})
 
         # When
         self.get(self.last_url)
