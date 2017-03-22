@@ -9,3 +9,5 @@ if [ ! -s "static" ]; then
   echo "Compiling translated schemas"
   "${DIR}"/translate_schemas.sh
 fi
+
+echo $(git rev-parse HEAD) > .application-version
