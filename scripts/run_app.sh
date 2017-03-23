@@ -16,8 +16,6 @@ if [ "${TRAVIS}" ]; then
   export EQ_WERKZEUG_LOG_LEVEL=WARNING
 fi
 
-echo $(git rev-parse HEAD) > .application-version
-
 if [ -z "$EQ_DEV_MODE" ]; then
   export EQ_DEV_MODE=True
 fi

@@ -29,8 +29,8 @@ def get_key(_key_name):
 
 
 def get_application_version_from_file():
-    if os.path.isfile('.application-version'):
-        return open('.application-version', "r").read().strip()
+    if os.path.isfile(EQ_APPLICATION_VERSION_PATH):
+        return open(EQ_APPLICATION_VERSION_PATH, "r").read().strip()
     else:
         return None
 
@@ -57,6 +57,7 @@ EQ_SECRET_KEY = os.getenv('EQ_SECRET_KEY', os.urandom(24))
 EQ_UA_ID = os.getenv('EQ_UA_ID', '')
 EQ_MAX_REPLAY_COUNT = os.getenv('EQ_REPLAY_COUNT', 50)
 EQ_NEW_RELIC_ENABLED = os.getenv("EQ_NEW_RELIC_ENABLED", "False") == "True"
+EQ_APPLICATION_VERSION_PATH = '.application-version'
 EQ_APPLICATION_VERSION = get_application_version_from_file()
 
 EQ_SERVER_SIDE_STORAGE_ENCRYPTION = parse_mode(os.getenv('EQ_SERVER_SIDE_STORAGE_ENCRYPTION', 'True'))
