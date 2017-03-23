@@ -22,6 +22,7 @@ class TestQuestionnaireInterstitial(IntegrationTestCase):
         self.post(action='start_questionnaire')
         self.assertStatusForbidden()
         self.assertEqualUrl(self.first_url)
+        self.assertEqualPageTitle('Error 403')
 
     def test_given_on_introduction_page_when_submit_valid_token_then_redirect_to_next_page(self):
         self.post(action='start_questionnaire')
