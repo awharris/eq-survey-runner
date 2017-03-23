@@ -3,7 +3,7 @@ import json
 from tests.integration.integration_test_case import IntegrationTestCase
 
 
-class TestQuestionnaireInterstitial(IntegrationTestCase):
+class TestQuestionnaireCsrf(IntegrationTestCase):
 
     def test_given_on_interstitial_page_when_submit_with_no_csrf_token_then_forbidden(self):
         # Given
