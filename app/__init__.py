@@ -18,7 +18,6 @@ from app.authentication.authenticator import login_manager
 from app.authentication.cookie_session import SHA256SecureCookieSessionInterface
 from app.data_model.database import db_session
 from app.new_relic import setup_newrelic
-from app.submitter.submitter import SubmitterFactory
 
 SECURE_HEADERS = {
     'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -31,16 +30,6 @@ SECURE_HEADERS = {
 
 cache = Cache()
 logger = get_logger()
-
-
-def rabbitmq_available():
-    submitter = SubmitterFactory.get_submitter()
-    if submitter.send_test():
-        logger.info('rabbitmq healthtest ok')
-        return True, "rabbit mq ok"
-    else:
-        logger.error('cannot connect to message server')
-        return False, "rabbit mq unavailable"
 
 
 class AWSReverseProxied(object):
